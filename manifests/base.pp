@@ -10,18 +10,6 @@ class sudo::base {
     mode   => 440,
   }
 
-  if versioncmp($::sudoversion,'1.7.2') < 0 {
-    #
-    # Backward compatibility for version less than 1.7.2
-    # 
-    common::concatfilepart { "000-sudoers.init":
-      ensure  => present,
-      manage  => true,
-      file    => "/etc/sudoers",
-      content => template("sudo/sudoers.erb"),
-    }
-   
-  } else {
     #
     # Use the #includedir directive to manage sudoers.d, version >= 1.7.2
     # 
@@ -35,7 +23,4 @@ class sudo::base {
     }
 
     File ["/etc/sudoers"] { content => template("sudo/sudoers.erb"), }
-
-  }
-
 }
